@@ -1,8 +1,9 @@
 # datafix_nodes_template
 
 example repos that use this template
-- maya
-- blender
+- https://github.com/hannesdelbeke/datafix_maya
+- https://github.com/hannesdelbeke/datafix_blender
+- https://github.com/hannesdelbeke/datafix_unreal
 - windows
 - perforce
 - git
