@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+namespaces = true
+
+[project]
+name = "datafix_nodes"
+authors = [
+    {name = "Hannes"},
+]
+description = "nodes for datafix"
+readme = "README.md"
+requires-python = ">=3.4"
+keywords = ["node", "validation"]
+license = { file = "LICENSE" }
+classifiers = [
+    "Programming Language :: Python :: 3.7",
+]
+#dynamic = ["dependencies"]
+dependencies = ['importlib-metadata; python_version<"3.7"']
+#dynamic = ["version"]
+version = "0.0.1"
+
+[project.urls]
+# Homepage = "https://github.com/datafix/datafix"
+# Source = "https://github.com/datafix/datafix"
+
