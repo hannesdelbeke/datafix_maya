@@ -9,8 +9,22 @@ example repos that use this template
 - git
 - svn
 
+pip install:
+```
+pip install git+https://github.com/hannesdelbeke/datafix_nodes_template.git
+```
+
 ## dev notes
-feel free to delete these dev notes once you copied this repo template
+delete these dev notes once you copied this repo template
+
+editable install for development
+```
+git clone https://github.com/hannesdelbeke/datafix_nodes_template.git
+cd datafix_nodes_template
+pip install -e .
+```
+
+
 
 1. To prevent clashing with the core datafix import handling., it's important to not use `__init__.py` files in your python packages.  
 To create datafix nodes within the datafix namespace, simply use the following folder structure, and Python should auto pick it up.
