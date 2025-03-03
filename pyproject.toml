@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 namespaces = true
 
 [project]
-name = "datafix_nodes"
+name = "datafix_blender"
 authors = [
     {name = "Hannes"},
 ]
