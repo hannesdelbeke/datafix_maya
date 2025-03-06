@@ -5,64 +5,65 @@ from datafix.nodes.maya_pymel.actions.select_pynode import SelectNode
 
 
 class _PynodeCollector(Collector):
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super(_PynodeCollector, self).__init__(*args, **kwargs)
         self.child_actions = [SelectNode]
 
     def collect(self):
         raise NotImplementedError
 
 
-class MeshCollector(SelectNode):
+class MeshCollector(_PynodeCollector):
     def collect(self):
         return pm.ls(type='mesh')
 
 
-class MaterialCollector(SelectNode):
+class MaterialCollector(_PynodeCollector):
     def collect(self):
         return pm.ls(type='shadingEngine')
 
 
-class TransformCollector(SelectNode):
+class TransformCollector(_PynodeCollector):
     def collect(self):
         return pm.ls(type='transform')
 
 
-class CameraCollector(SelectNode):
+class CameraCollector(_PynodeCollector):
     def collect(self):
         return pm.ls(type='camera')
 
 
-class LightCollector(SelectNode):
+class LightCollector(_PynodeCollector):
     def collect(self):
         return pm.ls(type='light')
 
 
-class JointCollector(SelectNode):
+class JointCollector(_PynodeCollector):
     def collect(self):
         return pm.ls(type='joint')
 
 
-class CurveCollector(SelectNode):
+class CurveCollector(_PynodeCollector):
     def collect(self):
         return pm.ls(type='nurbsCurve')
 
 
-class SurfaceCollector(SelectNode):
+class SurfaceCollector(_PynodeCollector):
     def collect(self):
         return pm.ls(type='nurbsSurface')
 
 
-class DeformerCollector(SelectNode):
+class DeformerCollector(_PynodeCollector):
     def collect(self):
         return pm.ls(type='deformer')
 
 
-class ConstraintCollector(SelectNode):
+class ConstraintCollector(_PynodeCollector):
     def collect(self):
         return pm.ls(type='constraint')
 
 
-class LocatorCollector(SelectNode):
+class LocatorCollector(_PynodeCollector):
     def collect(self):
         return pm.ls(type='locator')
 

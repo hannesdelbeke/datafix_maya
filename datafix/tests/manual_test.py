@@ -30,8 +30,8 @@ if not cmds.objExists("mySphere"):
 
 active_session = Session()
 datafix.core.active_session = active_session
-active_session.add(MeshLongNameCollector)  # the validator needs a collector to validate
-active_session.add(NgonValidator)
+active_session.append(MeshLongNameCollector)  # the validator needs a collector to validate
+active_session.append(NgonValidator)
 
 ## command line
 # active_session.run()
