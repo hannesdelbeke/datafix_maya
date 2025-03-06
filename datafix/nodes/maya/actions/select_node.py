@@ -1,10 +1,11 @@
 from datafix.core import Action
+import maya.cmds as cmds
 
-class SelectNode(Action):
-    # def __init__(self, node):
-    #     self.node = node
-    required_type = 'mesh name'
+
+class SelectNodeByName(Action):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.name = "Select Node"
 
     def action(self):
-        # self.parent contains a datanode. that has either meshname or mesh
-        import pymel.core as pm
+        cmds.select(self.parent.data)

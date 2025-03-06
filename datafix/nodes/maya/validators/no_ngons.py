@@ -9,80 +9,82 @@ from typing import List
 from maya.api.OpenMaya import MIntArray
 
 
-def get_ngon_ids(mesh_name) -> MIntArray:
-    """Finds ngons (faces with more than 4 sides) in the given mesh."""
-    ngons = om.MIntArray()  # Store ngon face IDs
-
-    if not cmds.objExists(mesh_name):
-        logging.error(f"{mesh_name} does not exist in the scene.")
-        return ngons
-
-    # Get the DAG path of the mesh
-    selection = om.MSelectionList()
-    selection.add(mesh_name)
-    dag_path = selection.getDagPath(0)
-
-    if not dag_path.hasFn(om.MFn.kMesh):
-        logging.error(f"{mesh_name} is not a mesh.")
-        return ngons
-
-    mesh_fn = om.MFnMesh(dag_path)
-    poly_iter = om.MItMeshPolygon(dag_path)  # Iterate over all faces
-
-    while not poly_iter.isDone():
-        if poly_iter.polygonVertexCount() > 4:
-            ngons.append(poly_iter.index())  # Store the ngon index
-
-        poly_iter.next()
-
-    return ngons
-
-
-
-# def find_ngons_slow(mesh_name):
-#     # TODO, tested and works, but might be slow, no open maya.
-#     """
-#     Validates whether the given mesh has n-gons.
-#     Raises an exception if n-gons are found.
-#     """
+# def get_ngon_ids(mesh_name) -> MIntArray:
+#     """Finds ngons (faces with more than 4 sides) in the given mesh."""
+#     ngons = om.MIntArray()  # Store ngon face IDs
+#
 #     if not cmds.objExists(mesh_name):
-#         raise Exception(f"{mesh_name} does not exist in the scene.")
+#         logging.error(f"{mesh_name} does not exist in the scene.")
+#         return ngons
 #
-#     faces_with_ngons = []
+#     # Get the DAG path of the mesh
+#     selection = om.MSelectionList()
+#     selection.add(mesh_name)
+#     dag_path = selection.getDagPath(0)
 #
-#     # Get the number of faces in the mesh
-#     num_faces = cmds.polyEvaluate(mesh_name, face=True)
+#     if not dag_path.hasFn(om.MFn.kMesh):
+#         logging.error(f"{mesh_name} is not a mesh.")
+#         return ngons
 #
-#     # Iterate through all faces
-#     for i in range(num_faces):
-#         # Get the vertices of the face (ignoring UV or split normals issues)
-#         face_vertices = cmds.polyListComponentConversion(f"{mesh_name}.f[{i}]", fromFace=True, toVertex=True)
-#         vertex_count = len(cmds.ls(face_vertices, flatten=True))
+#     mesh_fn = om.MFnMesh(dag_path)
+#     poly_iter = om.MItMeshPolygon(dag_path)  # Iterate over all faces
 #
-#         # If a face has more than 4 vertices, it's an n-gon
-#         if vertex_count > 4:
-#             faces_with_ngons.append(f"{mesh_name}.f[{i}]")
+#     while not poly_iter.isDone():
+#         if poly_iter.polygonVertexCount() > 4:
+#             ngons.append(poly_iter.index())  # Store the ngon index
 #
-#     if faces_with_ngons:
-#         raise Exception(f"{mesh_name} has n-gons: {len(faces_with_ngons)} found ({', '.join(faces_with_ngons[:5])}...)")
+#         poly_iter.next()
 #
-#     return True
+#     return ngons
+
+
+
+def find_ngons_slow(mesh_name):
+    # TODO, tested and works, but might be slow, no open maya.
+    """
+    Validates whether the given mesh has n-gons.
+    Raises an exception if n-gons are found.
+    """
+    if not cmds.objExists(mesh_name):
+        raise Exception(f"{mesh_name} does not exist in the scene.")
+
+    faces_with_ngons = []
+
+    # Get the number of faces in the mesh
+    num_faces = cmds.polyEvaluate(mesh_name, face=True)
+
+    # Iterate through all faces
+    for i in range(num_faces):
+        # Get the vertices of the face (ignoring UV or split normals issues)
+        face_vertices = cmds.polyListComponentConversion(f"{mesh_name}.f[{i}]", fromFace=True, toVertex=True)
+        vertex_count = len(cmds.ls(face_vertices, flatten=True))
+
+        # If a face has more than 4 vertices, it's an n-gon
+        if vertex_count > 4:
+            faces_with_ngons.append(f"{mesh_name}.f[{i}]")
+
+    if faces_with_ngons:
+        raise Exception(f"{mesh_name} has n-gons: {len(faces_with_ngons)} found ({', '.join(faces_with_ngons[:5])}...)")
+
+    return True
 
 
 class NgonValidator(Validator):
     required_type = str  # long mesh name
 
     def validate(self, data):
-        ngon_ids = get_ngon_ids(mesh_name=data)
-
-        state = NodeState.SUCCESS
-        if list(ngon_ids):
-            state = NodeState.FAIL
-            message = f"{data} has n-gons: {len(ngon_ids)} found ({', '.join(ngon_ids[:5])}...)"
-
-        data = ngon_ids
-
-        return data, state, message
+        find_ngons_slow(data)
+        # ngon_ids = get_ngon_ids(mesh_name=data)
+        #
+        # state = NodeState.SUCCESS
+        #
+        # # if list(ngon_ids):
+        #     state = NodeState.FAIL
+        #     message = f"{data} has n-gons: {len(ngon_ids)} found ({', '.join(ngon_ids[:5])}...)"
+        #
+        # data = ngon_ids
+        #
+        # return data, state, message
 
 
 # class NGonSelect(Action):
