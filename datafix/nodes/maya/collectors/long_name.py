@@ -14,43 +14,37 @@ class _NodeCollector(Collector):
             node.name = node.data.split('|')[-1]
 
 
-class MeshLongNameCollector(_NodeCollector):
-    child_actions = [SelectNodeByName]
+class MeshTransformCollector(_NodeCollector):
+    def collect(self):
+        # set() avoids duplicates of same transform, when a transform contains multiple meshes (shapes)
+        return list(set(cmds.listRelatives(cmds.ls(type='mesh'), p=True)))
 
+
+class MeshLongNameCollector(_NodeCollector):
     def collect(self):
         return cmds.ls(type='mesh', long=True)
 
 
 class MaterialLongNameCollector(_NodeCollector):
-    child_actions = [SelectNodeByName]
-
     def collect(self):
         return cmds.ls(type='shadingEngine', long=True)
 
 
 class TransformLongNameCollector(_NodeCollector):
-    child_actions = [SelectNodeByName]
-
     def collect(self):
         return cmds.ls(type='transform', long=True)
 
 
 class CameraLongNameCollector(_NodeCollector):
-    child_actions = [SelectNodeByName]
-
     def collect(self):
         return cmds.ls(type='camera', long=True)
 
 
 class LightLongNameCollector(_NodeCollector):
-    child_actions = [SelectNodeByName]
-
     def collect(self):
         return cmds.ls(type='light', long=True)
 
 
 class JointLongNameCollector(_NodeCollector):
-    child_actions = [SelectNodeByName]
-
     def collect(self):
         return cmds.ls(type='joint', long=True)
