@@ -10,7 +10,7 @@ if path not in sys.path:
 
 import datafix
 from datafix.nodes.maya.collectors.mesh_long_name import MeshLongNameCollector
-from datafix.nodes.maya.validators.no_ngons import NgonValidator
+from datafix.nodes.maya.validators.ngons import NgonValidator
 from datafix.core import active_session, Session
 from importlib import reload
 reload(datafix.nodes.maya.collectors.mesh_long_name)
@@ -18,7 +18,7 @@ import datafix.core.session
 reload(datafix.core.session)
 import datafix.core
 reload(datafix.core)
-reload( datafix.nodes.maya.validators.no_ngons )
+reload(datafix.nodes.maya.validators.ngons)
 from maya import cmds
 from datafix.nodes.maya.collectors.mesh_long_name import MeshLongNameCollector
 
