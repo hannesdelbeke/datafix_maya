@@ -8,7 +8,6 @@ class FrozenTransformsValidator(Validator):
         Validates whether the given mesh has n-gons.
         Raises an exception if n-gons are found.
         """
-        print(data)
         # Get the number of faces in the mesh
         num_faces = cmds.polyEvaluate(data, face=True)
 

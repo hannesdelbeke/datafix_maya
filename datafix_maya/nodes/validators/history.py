@@ -6,7 +6,7 @@ class ClearHistory(Action):
     """delete construction history"""
     # todo a bool to say if running this action triggers revalidation
     def action(self):
-        """data: long meshname"""
+        # data: long meshname
         cmds.delete(self.parent.data, constructionHistory=True)
 
 

@@ -1,7 +1,7 @@
 from datafix.core.collector import Collector
 from maya import cmds
 import pymel.core as pm
-from datafix.nodes.maya_pymel.actions.select_pynode import SelectNode
+from datafix_maya.nodes.pymel.actions.select_pynode import SelectNode
 
 
 class _PynodeCollector(Collector):

@@ -53,11 +53,11 @@ def create_test_scene():
 
 
 def setup_datafix_session():
-    from datafix.nodes.maya.collectors.long_name import MeshLongNameCollector
-    from datafix.nodes.maya.validators.ngons import NgonValidator
-    from datafix.nodes.maya.validators.history import HistoryValidator
-    from datafix.nodes.maya.validators.zero_transforms import ZeroTransformValidator
-    from datafix.nodes.maya.validators.frozen_transforms import FrozenTransformValidator
+    from datafix_maya.nodes.collectors.long_name import MeshLongNameCollector
+    from datafix_maya.nodes.validators.ngons import NgonValidator
+    from datafix_maya.nodes.validators.history import HistoryValidator
+    from datafix_maya.nodes.validators.zero_transforms import ZeroTransformValidator
+    from datafix_maya.nodes.validators.frozen_transforms import FrozenTransformValidator
 
     # Create a new session
     active_session = Session()

@@ -1,5 +1,5 @@
 from datafix.core import Session, Validator, Collector, NodeState
-from datafix.nodes.maya_pymel.collectors.pynodes import MeshCollector, MaterialCollector
+from datafix_maya.nodes.pymel.collectors.pynodes import MeshCollector, MaterialCollector
 from pymel import core as pm
 
 

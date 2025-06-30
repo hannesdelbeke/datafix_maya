@@ -1,46 +1,42 @@
 from datafix.core import Validator, active_session, NodeState, Action
+import datafix_maya.types
 from maya import cmds
-import logging
-
 import maya.api.OpenMaya as om
 import maya.cmds as cmds
 from collections import defaultdict
-from typing import List
 from maya.api.OpenMaya import MIntArray
 
 
-# def get_ngon_ids(mesh_name) -> MIntArray:
-#     """Finds ngons (faces with more than 4 sides) in the given mesh."""
-#     ngons = om.MIntArray()  # Store ngon face IDs
-#
-#     if not cmds.objExists(mesh_name):
-#         logging.error(f"{mesh_name} does not exist in the scene.")
-#         return ngons
-#
-#     # Get the DAG path of the mesh
-#     selection = om.MSelectionList()
-#     selection.add(mesh_name)
-#     dag_path = selection.getDagPath(0)
-#
-#     if not dag_path.hasFn(om.MFn.kMesh):
-#         logging.error(f"{mesh_name} is not a mesh.")
-#         return ngons
-#
-#     mesh_fn = om.MFnMesh(dag_path)
-#     poly_iter = om.MItMeshPolygon(dag_path)  # Iterate over all faces
-#
-#     while not poly_iter.isDone():
-#         if poly_iter.polygonVertexCount() > 4:
-#             ngons.append(poly_iter.index())  # Store the ngon index
-#
-#         poly_iter.next()
-#
-#     return ngons
+def find_ngons(mesh_dag_paths):
+    # TODO test
+    """
+    SLMesh can contain multiple selected meshes.
+    """
+    # based on MIT licensed code from github.com/JakobJK/modelChecker
+
+    # UUIDs are used to uniquely identify dependency graph nodes
+    ngons = defaultdict(list)  # dictionary mapping UUIDs to lists of face indices with ngons
+    selIt = om.MItSelectionList(mesh_dag_paths)  # iterator over list of mesh DAG paths
+
+    while not selIt.isDone():  # iterate through selection list
+        faceIt = om.MItMeshPolygon(selIt.getDagPath())  # iterator over mesh faces for current DAG path
+        fn = om.MFnDependencyNode(selIt.getDagPath().node())  # create function set to access node metadata
+        uuid = fn.uuid().asString()  # get UUID of current node as string
+
+        while not faceIt.isDone():  # iterate through faces of current mesh
+            numOfEdges = faceIt.getEdges()  # get list of edge indices for the current face
+            if len(numOfEdges) > 4:  # check if face is an ngon (more than 4 edges)
+                ngons[uuid].append(faceIt.index())  # add face index to list under this UUID
+            faceIt.next()  # move to next face
+
+        selIt.next()  # move to next selected object
+
+    return ngons  # ngons is a dict of format [uuid: [face_indices]]
 
 
 
 def find_ngons_slow(mesh_name):
-    # TODO, tested and works, but might be slow, no open maya.
+    # tested and works, but might be slow, no open maya.
     """
     Validates whether the given mesh has n-gons.
     Raises an exception if n-gons are found.
@@ -63,17 +59,29 @@ def find_ngons_slow(mesh_name):
         if vertex_count > 4:
             faces_with_ngons.append(f"{mesh_name}.f[{i}]")
 
-    if faces_with_ngons:
-        raise Exception(f"{mesh_name} has n-gons: {len(faces_with_ngons)} found ({', '.join(faces_with_ngons[:5])}...)")
-
-    return True
+    return faces_with_ngons
 
 
 class NgonValidator(Validator):
-    required_type = str  # long mesh name
+    required_type = datafix_maya.types.mesh  # long mesh name
 
     def validate(self, data):
-        find_ngons_slow(data)
+        ngon_faces = find_ngons_slow(data)
+
+        if ngon_faces:
+            raise Exception(f"{data} has n-gons: {len(ngon_faces)} faces found")
+
+        # long_mesh_name = data
+        # dag_path = om.MSelectionList().add(long_mesh_name).getDagPath(0)
+        # ngons =
+
+
+
+
+
+
+
+
         # ngon_ids = get_ngon_ids(mesh_name=data)
         #
         # state = NodeState.SUCCESS
