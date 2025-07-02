@@ -4,7 +4,7 @@ import os
 path = r"D:\repos\datafix"
 if path not in sys.path:
     sys.path.append(path)
-path = r"D:\repos\datafix_maya"
+path = r"/"
 if path not in sys.path:
     sys.path.append(path)
 

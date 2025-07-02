@@ -11,15 +11,6 @@ now we can check if the string 'pCube1' is a mesh-name, or just a string
 """
 
 
-def __generate_node_type_code():
-    """run this in maya to get a list of all node types"""
-    import maya.cmds as cmds  # noqa
-    node_types = cmds.ls(nt=True)  # 'AISEnvFacade', 'AlembicNode', ...
-    for name in node_types:
-        print(f"{name} = NewType('{name}', str)")
-    # now copy the code from the console, and paste it below
-
-
 AISEnvFacade = NewType('AISEnvFacade', str)
 AlembicNode = NewType('AlembicNode', str)
 ComputeGlobal = NewType('ComputeGlobal', str)

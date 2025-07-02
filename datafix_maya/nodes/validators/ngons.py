@@ -1,4 +1,4 @@
-from datafix.core import Validator, active_session, NodeState, Action
+from datafix.core import Validator, active_session, NodeState, Action, Collector
 import datafix_maya.types
 from maya import cmds
 import maya.api.OpenMaya as om
@@ -7,10 +7,10 @@ from collections import defaultdict
 from maya.api.OpenMaya import MIntArray
 
 
-def find_ngons(mesh_dag_paths):
+def find_ngons(mesh_dag_paths: om.MItSelectionList ):
     # TODO test
     """
-    SLMesh can contain multiple selected meshes.
+    mesh_dag_paths is a MSelectionList of mesh DAG paths.
     """
     # based on MIT licensed code from github.com/JakobJK/modelChecker
 
@@ -62,7 +62,16 @@ def find_ngons_slow(mesh_name):
     return faces_with_ngons
 
 
+class SelectNgons(Action):
+    """delete construction history"""
+    # todo a bool to say if running this action triggers revalidation
+    def action(self):
+        ngon_faces = find_ngons_slow(self.parent.data)  # format of [f"{mesh_name}.f[{i}]",...]
+        cmds.select(ngon_faces, replace=True)
+
+
 class NgonValidator(Validator):
+    child_actions = [SelectNgons]
     required_type = datafix_maya.types.mesh  # long mesh name
 
     def validate(self, data):
@@ -75,24 +84,6 @@ class NgonValidator(Validator):
         # dag_path = om.MSelectionList().add(long_mesh_name).getDagPath(0)
         # ngons =
 
-
-
-
-
-
-
-
-        # ngon_ids = get_ngon_ids(mesh_name=data)
-        #
-        # state = NodeState.SUCCESS
-        #
-        # # if list(ngon_ids):
-        #     state = NodeState.FAIL
-        #     message = f"{data} has n-gons: {len(ngon_ids)} found ({', '.join(ngon_ids[:5])}...)"
-        #
-        # data = ngon_ids
-        #
-        # return data, state, message
 
 
 # class NGonSelect(Action):

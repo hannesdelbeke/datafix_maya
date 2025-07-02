@@ -53,15 +53,14 @@ def create_test_scene():
 
 
 def setup_datafix_session():
-    from datafix_maya.nodes.collectors.long_name import MeshLongNameCollector
+    from datafix_maya.nodes.collectors import meshCollector
     from datafix_maya.nodes.validators.ngons import NgonValidator
     from datafix_maya.nodes.validators.history import HistoryValidator
     from datafix_maya.nodes.validators.zero_transforms import ZeroTransformValidator
-    from datafix_maya.nodes.validators.frozen_transforms import FrozenTransformValidator
 
     # Create a new session
     active_session = Session()
-    active_session.append(MeshLongNameCollector)  # Collect all meshes with long names
+    active_session.append(meshCollector)  # Collect all meshes with long names
     active_session.append(NgonValidator)  # Validate all meshes for n-gons
     active_session.append(HistoryValidator)  # Validate all meshes for history
     active_session.append(ZeroTransformValidator)  # Validate all meshes for zero transforms

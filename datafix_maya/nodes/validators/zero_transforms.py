@@ -1,9 +1,10 @@
 from datafix.core import Validator, Action
 from maya import cmds
-from datafix_maya.types import TransformLongName
+from datafix_maya.types import transform
 
 
 class ZeroTransformsAction(Action):
+    name = "Reset Transforms"
     def action(self):
         """Sets the translation, rotation, and scale values of the transform node to zero."""
         cmds.xform(self.parent.data, translation=(0, 0, 0), rotation=(0, 0, 0), scale=(1, 1, 1))
@@ -13,14 +14,9 @@ class ZeroTransformsAction(Action):
 class ZeroTransformsValidator(Validator):
     """Check if a transform node has zeroed-out transforms."""
     child_actions = [ZeroTransformsAction]
-
-    required_type = TransformLongName
+    required_type = transform
 
     def validate(self, data):
-        # data is meshTransformName, todo
-        if not cmds.objExists(data):
-            raise Exception(f"{data} does not exist in the scene.")
-
         translate_values = cmds.xform(data, query=True, translation=True, worldSpace=True)
         rotate_values = cmds.xform(data, query=True, rotation=True, worldSpace=True)
         scale_values = cmds.xform(data, query=True, scale=True, worldSpace=True)
