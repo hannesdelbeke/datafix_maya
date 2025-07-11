@@ -3,17 +3,10 @@ from pathlib import Path
 from datafix_maya import types
 
 
-def generate_node_type_code():
-    """run this in maya to get a list of all node types"""
-    import maya.cmds as cmds  # noqa
-    node_types = cmds.ls(nt=True)  # 'AISEnvFacade', 'AlembicNode', ...
-    for name in node_types:
-        print(f"{name} = NewType('{name}', str)")
-    # now copy the code from the console, and paste it in types.py
 
 
 def generate_collector_stubs():
-    stub_file = Path(r"D:\repos\datafix_maya\nodes\collectors\datafix_maya\collectors.pyi")
+    stub_file = Path(r"D:\repos\datafix_maya\datafix_maya\nodes\collectors\native.pyi")
     output_lines = [
         "from typing import List",
         "from datafix.core.collector import Collector",
@@ -34,3 +27,6 @@ def generate_collector_stubs():
 
     stub_file.write_text("\n".join(output_lines))
     print(f"✅ Stub written to: {stub_file.resolve()}")
+
+
+generate_collector_stubs()
