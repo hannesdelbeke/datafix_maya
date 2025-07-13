@@ -1,4 +1,4 @@
-from datafix.core import Validator, active_session, NodeState, Action, Collector
+from datafix.core import Validator, Action
 import datafix_maya.types
 from maya import cmds
 import maya.api.OpenMaya as om

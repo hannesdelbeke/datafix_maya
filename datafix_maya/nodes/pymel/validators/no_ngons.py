@@ -1,4 +1,4 @@
-from datafix.core import Validator, active_session, NodeState, Action
+from datafix.core import Validator, NodeState, Action
 import logging
 
 import pymel.core as pm

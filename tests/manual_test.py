@@ -9,9 +9,9 @@ if path not in sys.path:
     sys.path.append(path)
 
 import datafix
-from datafix.nodes.maya.collectors.long_name import MeshLongNameCollector
-from datafix.nodes.maya.validators.ngons import NgonValidator
-from datafix.core import active_session, Session
+from datafix_maya.nodes.collectors import MeshCollector
+from datafix_maya.nodes.validators.ngons import NgonValidator
+from datafix.core import Session, get_active_session
 from importlib import reload
 reload(datafix.nodes.maya.collectors.long_name)
 import datafix.core.session
@@ -20,7 +20,6 @@ import datafix.core
 reload(datafix.core)
 reload(datafix.nodes.maya.validators.ngons)
 from maya import cmds
-from datafix.nodes.maya.collectors.long_name import MeshLongNameCollector
 
 # make a cube and a sphere if not exist yet
 if not cmds.objExists("myCube"):
