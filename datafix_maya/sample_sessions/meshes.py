@@ -1,5 +1,10 @@
 import maya.cmds as cmds
 
+"""
+import datafix_maya.sample_sessions.meshes
+datafix_maya.sample_sessions.meshes.create_test_scene()
+datafix_maya.sample_sessions.meshes.setup_datafix_session()
+"""
 
 def create_test_scene():
     cmds.file(new=True, force=True)  # Start a new scene
@@ -53,14 +58,17 @@ def create_test_scene():
 
 
 def setup_datafix_session():
-    from datafix_maya.nodes.collectors import meshCollector
+    from datafix_maya.nodes.collectors import MeshCollector
     from datafix_maya.nodes.validators.ngons import NgonValidator
     from datafix_maya.nodes.validators.history import HistoryValidator
-    from datafix_maya.nodes.validators.zero_transforms import ZeroTransformValidator
+    from datafix_maya.nodes.validators.zero_transforms import ZeroTransformsValidator
+    from datafix.core import Session
 
     # Create a new session
     active_session = Session()
-    active_session.append(meshCollector)  # Collect all meshes with long names
+    active_session.append(MeshCollector)  # Collect all meshes with long names
     active_session.append(NgonValidator)  # Validate all meshes for n-gons
     active_session.append(HistoryValidator)  # Validate all meshes for history
-    active_session.append(ZeroTransformValidator)  # Validate all meshes for zero transforms
+    active_session.append(ZeroTransformsValidator)  # Validate all meshes for zero transforms
+
+    return active_session
