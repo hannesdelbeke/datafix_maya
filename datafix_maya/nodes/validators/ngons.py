@@ -72,7 +72,7 @@ class SelectNgons(Action):
 
 class NgonValidator(Validator):
     child_actions = [SelectNgons]
-    required_type = datafix_maya.types.mesh  # long mesh name
+    required_type = datafix_maya.types.Mesh  # long mesh name
 
     def validate(self, data):
         ngon_faces = find_ngons_slow(data)
