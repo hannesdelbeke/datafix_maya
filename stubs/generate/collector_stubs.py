@@ -3,8 +3,6 @@ from pathlib import Path
 from datafix_maya import types
 
 
-
-
 def generate_collector_stubs():
     stub_file = Path(r"D:\repos\datafix_maya\datafix_maya\nodes\collectors\native.pyi")
     output_lines = [
