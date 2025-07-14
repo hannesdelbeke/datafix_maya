@@ -11,7 +11,7 @@ if path not in sys.path:
 import datafix
 from datafix_maya.nodes.collectors import MeshCollector
 from datafix_maya.nodes.validators.ngons import NgonValidator
-from datafix.core import Session, get_active_session
+from datafix.core import Session
 from importlib import reload
 reload(datafix.nodes.maya.collectors.long_name)
 import datafix.core.session
